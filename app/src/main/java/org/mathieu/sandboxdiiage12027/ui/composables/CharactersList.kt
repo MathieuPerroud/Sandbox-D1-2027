@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.mathieu.sandboxdiiage12027.domain.models.Character
 import org.mathieu.sandboxdiiage12027.domain.models.charactersMock
-import kotlin.math.ceil
+import kotlin.math.floor
 
 
 //Nous avons 3 types d'affichage dans la largeur :
@@ -39,15 +39,18 @@ fun CharactersListContent(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(
-            ceil(
+            floor(
                 screenWidthDp / characterCardMinWidthRequired
-            ).toInt()
+            ).toInt().takeIf { it > 0 } ?: 1
         )
     ) {
         items(characters) {
-            CharacterCard(
-                character = it
-            )
+            Box(contentAlignment = Alignment.Center) {
+                CharacterCard(
+                    character = it
+                )
+
+            }
         }
     }
 }

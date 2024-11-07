@@ -3,9 +3,11 @@
 package org.mathieu.sandboxdiiage12027.ui.composables
 
 import android.content.Context
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -14,18 +16,24 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +47,7 @@ import coil.compose.AsyncImage
 import org.mathieu.sandboxdiiage12027.domain.models.Character
 import org.mathieu.sandboxdiiage12027.domain.models.LivingStatus
 import org.mathieu.sandboxdiiage12027.domain.models.charactersMock
+import org.mathieu.sandboxdiiage12027.nativemanager.SoundManager
 
 val pageBackground = Color(0xFF272B33)
 
@@ -107,36 +116,50 @@ private fun CharacterCardBody(
     container: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit
 ) {
 
+    var isPressed by remember { mutableStateOf(false) }
+
+    val elevation by animateDpAsState(targetValue = if (isPressed) 0.dp else 8.dp, label = "elevation")
+
+
     val context: Context = LocalContext.current
 
-    Card(
-        modifier = Modifier
+    container(
+        Modifier
             .padding(cardPadding)
-            .widthIn(max = cardMaxWidth)
+            .rotate(0f)
+            .shadow(elevation)
+            .width(cardMaxWidth)
+            .background(cardBackgroundColor)
+            .height(IntrinsicSize.Max)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    },
+                    onTap = {
+                        SoundManager(context).playButtonClickedSound()
+                    }
+
+                )
+            }
     ) {
 
-        container(
-            Modifier
-                .fillMaxWidth()
-                .background(cardBackgroundColor)
-                .height(IntrinsicSize.Max)
-        ) {
-
-            AsyncImage(
-                modifier = Modifier
-                    .background(pageBackground.copy(alpha = 0.7f))
-                    .aspectRatio(1f) // L'image fait 1/1 de ratio
-                    .fillMaxHeight(),
-                model = character.image,
-                contentDescription = "character_image",
-                imageLoader = ImageLoader(context),
-                contentScale = ContentScale.Fit
-            )
+        AsyncImage(
+            modifier = Modifier
+                .background(pageBackground.copy(alpha = 0.7f))
+                .aspectRatio(1f) // L'image fait 1/1 de ratio
+                .fillMaxHeight(),
+            model = character.image,
+            contentDescription = "character_image",
+            imageLoader = ImageLoader(context),
+            contentScale = ContentScale.Fit
+        )
 
 
-            CharacterCardContent(character)
+        CharacterCardContent(character)
 
-        }
     }
 
 }
