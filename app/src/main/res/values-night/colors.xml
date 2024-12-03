@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background">@color/shark</color>
+    <color name="card_background">@color/tuna</color>
+    <color name="label">@color/silver_chalice</color>
+    <color name="status">@color/white</color>
+    <color name="text">@color/wild_sand</color>
+    <color name="dead_dot">@color/valencia</color>
+    <color name="alive_dot">@color/apple</color>
+    <color name="unknown_dot">@color/silver_chalice</color>
+
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background">@color/iron</color>
+    <color name="card_background">@color/athens_gray</color>
+    <color name="label">@color/nobel</color>
+    <color name="text">@color/mine_shaft</color>
+    <color name="status">@color/black</color>
+
+    <color name="dead_dot">@color/valencia</color>
+    <color name="alive_dot">@color/apple</color>
+    <color name="unknown_dot">@color/silver_chalice</color>
+
+</resources>

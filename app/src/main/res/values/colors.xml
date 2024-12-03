@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Raw -->
+    <color name="blue_zodiac">#13385B</color>
+    <color name="amber">#FFC100</color>
+    <color name="anakiwa">#98CBFF</color>
+    <color name="emerald">#34C759</color>
+
+
+    <color name="athens_gray">#F2F2F2</color>
+    <color name="iron">#D9D9D9</color>
+    <color name="nobel">#B3B3B3</color>
+    <color name="mine_shaft">#333333</color>
+    <color name="black">#000000</color>
+
+    <color name="shark">#272B33</color>
+    <color name="tuna">#3C3E44</color>
+    <color name="silver_chalice">#9E9E9E</color>
+    <color name="wild_sand">#F5F5F5</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="valencia">#D63D2E</color>
+    <color name="apple">#55CC44</color>
+
+    <!-- Business -->
+    <color name="background"/>
+    <color name="card_background"/>
+    <color name="label"/>
+    <color name="status"/>
+    <color name="text"/>
+    <color name="dead_dot"/>
+    <color name="alive_dot"/>
+    <color name="unknown_dot"/>
+
 </resources>

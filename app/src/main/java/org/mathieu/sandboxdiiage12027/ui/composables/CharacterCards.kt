@@ -37,6 +37,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,31 +45,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import org.mathieu.sandboxdiiage12027.R
 import org.mathieu.sandboxdiiage12027.domain.models.Character
 import org.mathieu.sandboxdiiage12027.domain.models.LivingStatus
 import org.mathieu.sandboxdiiage12027.domain.models.charactersMock
 import org.mathieu.sandboxdiiage12027.nativemanager.SoundManager
 
-val pageBackground = Color(0xFF272B33)
-
-private val cardBackgroundColor = Color(0xFF3C3E44)
-
-private val labelColor = Color(0xFF9E9E9E)
-private val statusColor = Color(0xFFFFFFFF)
-private val textColor = Color(0xFFF5F5F5)
-
-private val redDotColor = Color(0xFFD63D2E)
-private val greenDotColor = Color(0xFF55CC44)
-private val grayDotColor = Color(0xFF9E9E9E)
-
 
 val LivingStatus.color: Color
-    get() = when (this) {
-        LivingStatus.Unknown -> grayDotColor
-        LivingStatus.Dead -> redDotColor
-        LivingStatus.Alive -> greenDotColor
+    @Composable get() = when (this) {
+        LivingStatus.Unknown -> colorResource(R.color.unknown_dot)
+        LivingStatus.Dead -> colorResource(R.color.dead_dot)
+        LivingStatus.Alive -> colorResource(R.color.alive_dot)
     }
-
 
 private val cardPadding = 13.5.dp
 private val cardMaxWidth = 420.dp
@@ -77,7 +66,8 @@ val characterCardMinWidthRequired = cardMaxWidth + cardPadding * 2
 
 @Composable
 fun CharacterCard(
-    character: Character
+    character: Character,
+    clickedOnCard: () -> Unit = { }
 ) {
 
     // Récupération de la largeur de l'écran en dp
@@ -93,7 +83,8 @@ fun CharacterCard(
                     modifier = modifier,
                     content = { content() }
                 )
-            }
+            },
+            clickedOnCard = clickedOnCard
         )
     } else {
         CharacterCardBody(
@@ -103,7 +94,8 @@ fun CharacterCard(
                     modifier = modifier,
                     content = { content() }
                 )
-            }
+            },
+            clickedOnCard = clickedOnCard
         )
     }
 
@@ -113,7 +105,8 @@ fun CharacterCard(
 @Composable
 private fun CharacterCardBody(
     character: Character,
-    container: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit
+    container: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit,
+    clickedOnCard: () -> Unit
 ) {
 
     var isPressed by remember { mutableStateOf(false) }
@@ -129,7 +122,7 @@ private fun CharacterCardBody(
             .rotate(0f)
             .shadow(elevation)
             .width(cardMaxWidth)
-            .background(cardBackgroundColor)
+            .background(colorResource(R.color.card_background))
             .height(IntrinsicSize.Max)
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -139,6 +132,7 @@ private fun CharacterCardBody(
                         isPressed = false
                     },
                     onTap = {
+                        clickedOnCard()
                         SoundManager(context).playButtonClickedSound()
                     }
 
@@ -148,7 +142,7 @@ private fun CharacterCardBody(
 
         AsyncImage(
             modifier = Modifier
-                .background(pageBackground.copy(alpha = 0.7f))
+                .background(colorResource(R.color.background).copy(alpha = 0.7f))
                 .aspectRatio(1f) // L'image fait 1/1 de ratio
                 .fillMaxHeight(),
             model = character.image,
@@ -178,7 +172,7 @@ private fun CharacterCardContent(character: Character) {
             text = character.name,
             fontSize = 21.sp,
             fontWeight = FontWeight.Bold,
-            color = textColor,
+            color = colorResource(R.color.text),
             maxLines = 1
         )
 
@@ -235,7 +229,7 @@ private fun CharacterStatusView(
                 .basicMarquee(iterations = Int.MAX_VALUE),
             text = "${livingStatus.name} - $species",
             fontSize = 12.sp,
-            color = statusColor
+            color = colorResource(R.color.status)
         )
 
     }
@@ -251,7 +245,7 @@ fun CharacterInformationView(
         Text(
             modifier = Modifier
                 .basicMarquee(iterations = Int.MAX_VALUE),
-            color = labelColor,
+            color = colorResource(R.color.label),
             text = label,
             fontSize = 12.sp
         )
@@ -261,7 +255,7 @@ fun CharacterInformationView(
         Text(
             modifier = Modifier
                 .basicMarquee(iterations = Int.MAX_VALUE),
-            color = textColor,
+            color = colorResource(R.color.text),
             text = value,
             fontSize = 14.sp,
             maxLines = 1
@@ -274,7 +268,7 @@ fun CharacterInformationView(
 private fun CharacterCardWithSmallScreen() =
     Box(
         modifier = Modifier
-            .background(pageBackground)
+            .background(colorResource(R.color.background))
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -288,7 +282,7 @@ private fun CharacterCardWithSmallScreen() =
 private fun CharacterCardWithWideScreen() =
     Box(
         modifier = Modifier
-            .background(pageBackground)
+            .background(colorResource(R.color.background))
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
